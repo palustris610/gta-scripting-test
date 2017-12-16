@@ -1,27 +1,27 @@
 -- NOTES --
 -- try to make a simple race
-    --RP szerű? irodába menni, és onnan lehessen tervezni, indítás helyszínek, pénz(nevezés, autók, tuning)?
-    --tesztelést hogyan lehet megoldani?
-    --egyszerre csak 1 mehessen? igen!
-    --építés vagy verseny - külön mod rá, hogy mindenki saját maga csinálhassa meg? melyik legyen előbb?
+	--RP style? go into building to start a race, setup locations, money(entry fee, car, tuning, bets)
+	--how to test during creating?
+	--only 1 race per session? yes!
+	--creator or racing - separate mod, so everyone can make their own? which one to start with?
     --
--- race creator? -versenyek létrehozása, hogy ne database-t kelljen írni
-    --opciók (optionLOCK, létszám, min/max körök, spawn rend)
-    --koordináták lepakolása, marker nyíl a következőre mutasson (dinamikus!), utolsó marker finish
-    --props
-    --speckó markerek, repair, stb
--- race mode -verseny futtatása, táblákból kiolvasni az adatokat
-    --SETUP: opciók (tipus, traffic, körök, class, custom autok, idő, időjárás, kameralock, )
-    --RACE: spawn rendben, visszaszámlálás, checkpoint és kör figyelés, respawnok, ghosting, despawn@finish
-        --@disconnect/leave despawn, vízbe esett despawn(kikapcsolható?)
-        --wrong way, ha rossz irányba halad az ember - kikapcsolható legyen
+-- race creator? -creating races so it's not HARDCODED database sourced
+	--race options (optionLOCK, population, min/max laps, starting grid)
+	--placing coordinates, marker arrow pointing to next one (dynamic), last marker is finish, land-air-water?
+	--placing props
+	--special markers such as repair, A-B route, boost, specialability, etc
+	--individual checkpoint settings (type, route, transform, wrongway notification?)
+-- race mode -running the race, reading specs from database, 
+	--SETUP: opctions (type, traffic, laps, class, custom cars, time, weather, camlock, etc)
+		--SETUP2: preparing track, spawning props, etc
+	--RACE: spawn in startgrid, countdown, checkpoint and lap detections, respawns, ghosting, despawn@finish
+	    --@disconnect/leave despawn, falling in water despawn (toggle option?)
+        --wrong way text if going opposite direction, toggle option?
 
 --useful stuff
 --wiki stuff: https://wiki.gtanet.work/index.php?title=Main_Page
---Minden cucc: https://wiki.gtanet.work/index.php?title=Scripting_Resources
---Marker = kék karika, trigger zone
+--All the stuff: https://wiki.gtanet.work/index.php?title=Scripting_Resources
 --Marker types: https://wiki.gtanet.work/index.php?title=Marker
---Blip = térképen jelölő ikon
 --Blip types: https://wiki.gtanet.work/index.php?title=Blips
 
 
