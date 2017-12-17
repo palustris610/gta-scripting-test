@@ -13,7 +13,8 @@
 	--individual checkpoint settings (type, route, transform, wrongway notification?)
 -- race mode -running the race, reading specs from database, 
 	--SETUP: opctions (type, traffic, laps, class, custom cars, time, weather, camlock, etc)
-		--SETUP2: preparing track, spawning props, etc
+		--teleport to lobby area, invite players
+	--SETUP2: preparing track, spawning props, etc
 	--RACE: spawn in startgrid, countdown, checkpoint and lap detections, respawns, ghosting, despawn@finish
 	    --@disconnect/leave despawn, falling in water despawn (toggle option?)
         --wrong way text if going opposite direction, toggle option?
@@ -33,6 +34,10 @@ local racingTriggers = {
 	{x = 4,y = 4,z = 4, type = 1},
 	{x = 5,y = 5,z = 5, type = 1},
 	{x = 6,y = 6,z = 6, type = 1}
+}
+
+local lobbyArea = {
+	{x = 1, y = 1, z = 1}
 }
 
 -- Draw Markers -- 
@@ -58,9 +63,10 @@ Citizen.CreateThread(function()
 			if dist <= 1.2 then --distance less than
 				if IsControlJustPressed(1, 51) then --pressed button
                     pP = GetPlayerPed(-1) --get playerid
-					SetEntityCoords(pP, x, y, z) --teleport to coord
+					SetEntityCoords(pP, lobbyArea[0].x, lobbyArea[0].y, lobbyArea[0].z) --teleport to lobby area
 				end
 			end
 		end
 	end
 end)
+
