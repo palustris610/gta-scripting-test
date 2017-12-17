@@ -13,7 +13,8 @@
 	--how to test during creating?
 	--only 1 race per session? yes!
 	--creator or racing - separate mod, so everyone can make their own? which one to start with? i think the race
-    --need a menu system
+	--need a menu system
+	--need to clear all traffic-pedestrians-animals!
 -- race creator? -creating races so it's not HARDCODED database sourced
 	--race options (optionLOCK, population, min/max laps, starting grid)
 	--placing coordinates, marker arrow pointing to next one (dynamic), last marker is finish, land-air-water?
@@ -43,16 +44,16 @@
 -- TABLES
 --race start or creator marker: replayicon id:24 OR id: 1 and 4 = cylinder and flag
 --need table for racestart=0 and racecreator=1 triggers
+--marker coords = player coord-1
 local racingTriggers = {
-	{x = 1016.97,y = 177.969,z = 80.706, type = "race"}, --next to racetrack at entrance
-	{x = 2,y = 2,z = 2, type = "racecreator"},
+	{x = 1016.39, y = 176.954, z = 79.8558, type = "race"}, --next to racetrack at entrance
+	{x = 2, y = 2, z = 2, type = "racecreator"},
 }
 -- lobby area to setup the race, get players to, select cars, etc
-local lobbyArea = {
-	{x = 1121.17,y = 249.434,z = 80.7056}--next to racetrack in carpark, could be the big parking area nearby too
-}
+local lobbyArea = {x = 1121.17, y = 249.434, z = 80.7056}--next to racetrack in carpark, could be the big parking area nearby too
+
 -- FUNCTIONDEFINITIONS
---[[
+
 local fakecar = {model = '', car = nil} --for racecar selector
 
 local function LocalPed()
@@ -167,14 +168,15 @@ Citizen.CreateThread(function()
 			if racingTriggers[k].type == "race" then
 				DrawMarker(1, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 0, 255, 200, 0, 0, 0, 0)
 				--change color or add another marker into it
-			else if racingTriggers[k].type == "racecreator" then
+			end
+			if racingTriggers[k].type == "racecreator" then
 				DrawMarker(1, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 0, 255, 200, 0, 0, 0, 0)
 			end
 		end
 	end
 end)
 
-]]
+
 -- MAINCODE
 
 --local raceInProgress = false
@@ -185,13 +187,16 @@ Citizen.CreateThread(function()
 		for k in pairs(racingTriggers) do --foreach marker in racingTriggers
 
 			local plyCoords = GetEntityCoords(GetPlayerPed(-1), false) --get player coords
-			local dis = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z) --distance
+			local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z) --distance
 
 			if dist <= 1.2 then --distance less than
+				drawTxt('Press E to begin',0,1,0.5,0.8,0.6,255,255,255,255)
 				if IsControlJustPressed(1, 51) then --pressed CONTEXT button
                     pP = GetPlayerPed(-1) --get playerid
-					SetEntityCoords(pP, lobbyArea[0].x, lobbyArea[0].y, lobbyArea[0].z) --teleport to lobby area
-					--setup race
+					SetEntityCoords(pP, lobbyArea.x, lobbyArea.y, lobbyArea.z) --teleport to lobby area
+					
+					--local g = Citizen.InvokeNative(0xC906A7DAB05C8D2B,pos[1],pos[2],pos[3],Citizen.PointerValueFloat(),0)
+					--SetEntityCoords(ped,pos[1],pos[2],g)--setup race
 					--start race
 					--raceCountDown()
 				end
