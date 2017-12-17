@@ -194,11 +194,7 @@ Citizen.CreateThread(function()
 				if IsControlJustPressed(1, 51) then --pressed CONTEXT button
                     pP = GetPlayerPed(-1) --get playerid
 					SetEntityCoords(pP, lobbyArea.x, lobbyArea.y, lobbyArea.z) --teleport to lobby area
-					
-					--local g = Citizen.InvokeNative(0xC906A7DAB05C8D2B,pos[1],pos[2],pos[3],Citizen.PointerValueFloat(),0)
-					--SetEntityCoords(ped,pos[1],pos[2],g)--setup race
-					--start race
-					--raceCountDown()
+					raceCountDown()
 				end
 			end
 		end
