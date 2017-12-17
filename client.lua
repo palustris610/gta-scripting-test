@@ -52,6 +52,7 @@ local lobbyArea = {
 	{x = 1121.17,y = 249.434,z = 80.7056}--next to racetrack in carpark, could be the big parking area nearby too
 }
 -- FUNCTIONDEFINITIONS
+--[[
 local fakecar = {model = '', car = nil} --for racecar selector
 
 local function LocalPed()
@@ -173,10 +174,10 @@ Citizen.CreateThread(function()
 	end
 end)
 
-
+]]
 -- MAINCODE
 
-local raceInProgress = false
+--local raceInProgress = false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -192,17 +193,17 @@ Citizen.CreateThread(function()
 					SetEntityCoords(pP, lobbyArea[0].x, lobbyArea[0].y, lobbyArea[0].z) --teleport to lobby area
 					--setup race
 					--start race
-					raceCountDown()
+					--raceCountDown()
 				end
 			end
 		end
-		
+		--[[
 		if raceInProgress then --race started
 			local ped = LocalPed()
 			
 
 		end
-
+		]]
 
 	end
 end)
