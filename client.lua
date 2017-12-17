@@ -20,6 +20,7 @@
 	--placing props
 	--special markers such as repair, A-B route, boost, specialability, etc
 	--individual checkpoint settings (type, route, transform, wrongway notification?)
+	--SAVE DATA: sql server?
 -- race mode -running the race, reading specs from database, 
 	--SETUP: opctions (type, traffic, laps, class, custom cars, time, weather, camlock, etc)
 		--teleport to lobby area, invite players, select cars veh shop style
