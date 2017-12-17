@@ -37,27 +37,28 @@
 --All the stuff: https://wiki.gtanet.work/index.php?title=Scripting_Resources
 --Marker types: https://wiki.gtanet.work/index.php?title=Marker
 --Blip types: https://wiki.gtanet.work/index.php?title=Blips
+--Controls: https://wiki.gtanet.work/index.php?title=Game_Controls
 --vehicle shop by Arturs: https://forum.fivem.net/t/release-vehicle-shop-by-arturs/1783
 
 -- TABLES
 --race start or creator marker: replayicon id:24 OR id: 1 and 4 = cylinder and flag
 --need table for racestart=0 and racecreator=1 triggers
 local racingTriggers = {
-	{x = 1,y = 1,z = 1, type = 0},
-	{x = 2,y = 2,z = 2, type = 1},
+	{x = 1016.97,y = 177.969,z = 80.706, type = "race"}, --next to racetrack at entrance
+	{x = 2,y = 2,z = 2, type = "racecreator"},
 }
 -- lobby area to setup the race, get players to, select cars, etc
 local lobbyArea = {
-	{x = 1, y = 1, z = 1}
+	{x = 1121.17,y = 249.434,z = 80.7056}--next to racetrack in carpark, could be the big parking area nearby too
 }
 -- FUNCTIONDEFINITIONS
-local fakecar = {model = '', car = nil} --racecar selector
+local fakecar = {model = '', car = nil} --for racecar selector
 
 local function LocalPed()
 	return GetPlayerPed(-1)
 end
 
-function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a) --onscreen text
 	SetTextFont(font)
 	SetTextProportional(0)
 	SetTextScale(scale, scale)
@@ -145,7 +146,15 @@ SetNotificationTextEntry('STRING')
 AddTextComponentString(text)
 DrawNotification(false, false)
 end
-
+function raceCountDown()
+	drawTxt('3',0,1,0.5,0.8,0.6,255,255,255,255)				
+	Wait(1000)
+	drawTxt('2',0,1,0.5,0.8,0.6,255,255,255,255)
+	Wait(1000)
+	drawTxt('1',0,1,0.5,0.8,0.6,255,255,255,255)
+	Wait(1000)
+	drawTxt('GO',0,1,0.5,0.8,0.6,255,255,255,255)
+end
 
 -- PREPARATIONS
 -- Draw Markers -- 
@@ -154,7 +163,12 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		for k in pairs(racingTriggers) do
 			-- Draw Marker Here --
-			DrawMarker(1, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 0, 255, 200, 0, 0, 0, 0)
+			if racingTriggers[k].type == "race" then
+				DrawMarker(1, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 0, 255, 200, 0, 0, 0, 0)
+				--change color or add another marker into it
+			else if racingTriggers[k].type == "racecreator" then
+				DrawMarker(1, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 0, 255, 200, 0, 0, 0, 0)
+			end
 		end
 	end
 end)
@@ -162,7 +176,7 @@ end)
 
 -- MAINCODE
 
-
+local raceInProgress = false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -173,12 +187,23 @@ Citizen.CreateThread(function()
 			local dis = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z) --distance
 
 			if dist <= 1.2 then --distance less than
-				if IsControlJustPressed(1, 51) then --pressed button
+				if IsControlJustPressed(1, 51) then --pressed CONTEXT button
                     pP = GetPlayerPed(-1) --get playerid
 					SetEntityCoords(pP, lobbyArea[0].x, lobbyArea[0].y, lobbyArea[0].z) --teleport to lobby area
+					--setup race
+					--start race
+					raceCountDown()
 				end
 			end
 		end
+		
+		if raceInProgress then --race started
+			local ped = LocalPed()
+			
+
+		end
+
+
 	end
 end)
 
