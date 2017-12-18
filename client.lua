@@ -40,6 +40,7 @@
 --Blip types: https://wiki.gtanet.work/index.php?title=Blips
 --Controls: https://wiki.gtanet.work/index.php?title=Game_Controls
 --vehicle shop by Arturs: https://forum.fivem.net/t/release-vehicle-shop-by-arturs/1783
+--scaleform text: https://forum.fivem.net/t/how-to-use-scaleforms/49546?u=vespura&source_topic_id=50092
 
 -- TABLES
 --race start or creator marker: replayicon id:24 OR id: 1 and 4 = cylinder and flag
@@ -149,23 +150,21 @@ SetNotificationTextEntry('STRING')
 AddTextComponentString(text)
 DrawNotification(false, false)
 end
-
-function raceCountdown()
 local counter = '3'
-		while raceProgress == "startup" do
-			Citizen.Wait(1000)	-- wait 1 sec to adjust text
-			if counter == '1' then 
-				counter ='GO'
-				raceProgress = "started"
-			end
-			if counter == '2' then 
-				counter ='1'
-			end
-			if counter == '3' then 
-				counter ='2'
-			end
-		
-		end	
+function raceCountdown()
+	while raceProgress == "startup" do
+		Citizen.Wait(1000)	-- wait 1 sec to adjust text
+		if counter == '1' then 
+			counter ='GO'
+			raceProgress = "started"
+		end
+		if counter == '2' then 
+			counter ='1'
+		end
+		if counter == '3' then 
+			counter ='2'
+		end
+	end			
 end
 
 -- PREPARATIONS
@@ -201,7 +200,26 @@ Citizen.CreateThread(function()
 			local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, racingTriggers[k].x, racingTriggers[k].y, racingTriggers[k].z) --distance
 
 			if dist <= 1.2 then --distance less than
-				drawTxt('Press E to begin',0,1,0.5,0.8,0.6,255,255,255,255)
+				--drawTxt('Press E to begin',0,1,0.5,0.8,0.6,255,255,255,255)
+				Citizen.CreateThread(function()
+					function Initialize(scaleform)
+						local scaleform = RequestScaleformMovie(scaleform)
+				
+						while not HasScaleformMovieLoaded(scaleform) do
+							Citizen.Wait(0)
+						end
+						PushScaleformMovieFunction(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
+						PushScaleformMovieFunctionParameterString("~r~WASTED")
+						PushScaleformMovieFunctionParameterString("You commited suicide")
+						PopScaleformMovieFunctionVoid()
+						return scaleform
+					end
+					scaleform = Initialize("mp_big_message_freemode")
+					while true do
+						Citizen.Wait(0)
+						DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
+					end
+				end)
 				if IsControlJustPressed(1, 51) then --pressed CONTEXT button
                     pP = GetPlayerPed(-1) --get playerid
 					SetEntityCoords(pP, lobbyArea.x, lobbyArea.y, lobbyArea.z) --teleport to lobby area
@@ -214,6 +232,7 @@ Citizen.CreateThread(function()
 		if raceProgress == "startup" then
 			drawTxt(counter,0,1,0.5,0.8,0.6,255,255,255,255)
 			raceCountdown()
+			requestsc
 		end
 
 		if raceProgress == "started" then
