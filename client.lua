@@ -47,6 +47,7 @@
 --marker coords = player coord-1
 local racingTriggers = {
 	{x = 1016.39, y = 176.954, z = 79.8558, type = "race"}, --next to racetrack at entrance
+	{x = 1121.17, y = 249.434, z = 80.7056, type = "race"}, --only for debug
 	{x = 2, y = 2, z = 2, type = "racecreator"},
 }
 -- lobby area to setup the race, get players to, select cars, etc
@@ -148,14 +149,23 @@ SetNotificationTextEntry('STRING')
 AddTextComponentString(text)
 DrawNotification(false, false)
 end
-function raceCountDown()
-	drawTxt('3',0,1,0.5,0.8,0.6,255,255,255,255)				
-	Wait(1000)
-	drawTxt('2',0,1,0.5,0.8,0.6,255,255,255,255)
-	Wait(1000)
-	drawTxt('1',0,1,0.5,0.8,0.6,255,255,255,255)
-	Wait(1000)
-	drawTxt('GO',0,1,0.5,0.8,0.6,255,255,255,255)
+
+function raceCountdown()
+local counter = '3'
+		while raceProgress == "startup" do
+			Citizen.Wait(1000)	-- wait 1 sec to adjust text
+			if counter == '1' then 
+				counter ='GO'
+				raceProgress = "started"
+			end
+			if counter == '2' then 
+				counter ='1'
+			end
+			if counter == '3' then 
+				counter ='2'
+			end
+		
+		end	
 end
 
 -- PREPARATIONS
@@ -176,10 +186,11 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- Countdown test --
 
 -- MAINCODE
 
---local raceInProgress = false
+local raceProgress = "none"
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -194,21 +205,20 @@ Citizen.CreateThread(function()
 				if IsControlJustPressed(1, 51) then --pressed CONTEXT button
                     pP = GetPlayerPed(-1) --get playerid
 					SetEntityCoords(pP, lobbyArea.x, lobbyArea.y, lobbyArea.z) --teleport to lobby area
-					
-					--local g = Citizen.InvokeNative(0xC906A7DAB05C8D2B,pos[1],pos[2],pos[3],Citizen.PointerValueFloat(),0)
-					--SetEntityCoords(ped,pos[1],pos[2],g)--setup race
-					--start race
-					--raceCountDown()
+					raceProgress = "startup"
+					counter = '3'
 				end
 			end
 		end
-		--[[
-		if raceInProgress then --race started
-			local ped = LocalPed()
-			
-
+		
+		if raceProgress == "startup" then
+			drawTxt(counter,0,1,0.5,0.8,0.6,255,255,255,255)
+			raceCountdown()
 		end
-		]]
+
+		if raceProgress == "started" then
+			raceProgress = "none"
+		end
 
 	end
 end)
